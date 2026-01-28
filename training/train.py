@@ -5,7 +5,7 @@ from training.model import build_model
 from training.trainer import train_model
 from training.validate import validate_model
 
-DATASET_PATH = "datasets/synthetic"
+DATASET_PATH = "dataset/synthetic_dataset"
 NUM_CLASSES = 8
 IMG_SIZE = 224
 BATCH_SIZE = 32

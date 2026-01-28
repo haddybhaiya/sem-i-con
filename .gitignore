@@ -30,7 +30,7 @@ venv/
 # =========================
 # Data (IMPORTANT)
 # =========================
-datasets/
+dataset/
 data/
 synthetic_dataset/
 base_dataset/
