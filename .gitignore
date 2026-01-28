@@ -1,0 +1,86 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# =========================
+# Virtual Environments
+# =========================
+venv/
+.env/
+.env.*
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+*.code-workspace
+
+# =========================
+# Jupyter / Notebooks
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Data (IMPORTANT)
+# =========================
+datasets/
+data/
+synthetic_dataset/
+base_dataset/
+*.pkl
+*.h5
+*.npz
+*.npy
+
+# =========================
+# Models / Weights
+# =========================
+*.pth
+*.pt
+*.onnx
+*.ckpt
+*.tflite
+*.engine
+
+# =========================
+# Logs / Outputs
+# =========================
+logs/
+runs/
+outputs/
+results/
+checkpoints/
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# Temp / Cache
+# =========================
+*.log
+*.tmp
+*.cache
+
+# =========================
+# API keys / secrets
+# =========================
+*.key
+*.pem
+secrets/
+config/secrets.yaml
+
+# =========================
+# Experiments
+# =========================
+notebooks/outputs/
