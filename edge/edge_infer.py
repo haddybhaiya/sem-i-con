@@ -1,6 +1,8 @@
 import onnxruntime as ort
 import cv2
 import numpy as np
+from learning.self_learn import self_learn_hook
+
 
 MODEL_PATH = "models/edge_model_int8.onnx"
 test_img = "dataset/sample/test3.png"  
@@ -34,7 +36,14 @@ def infer(img_path):
     outputs = session.run(None, {input_name: x})
     probs = outputs[0][0]
     cls_id = int(np.argmax(probs))
-    return CLASSES[cls_id], float(probs[cls_id])
+    pred_class = CLASSES[cls_id]
+    confidence = float(probs[cls_id])
+
+    #self learning trigger
+    self_learn_hook(img_path, pred_class, confidence)
+
+    return pred_class, confidence
+
 
 if __name__ == "__main__":
     label, conf = infer(test_img)
