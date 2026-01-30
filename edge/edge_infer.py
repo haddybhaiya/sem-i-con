@@ -16,6 +16,7 @@ CLASSES = [
     "via",
     "other"
 ]
+OTHER_THRESHOLD = 0.80
 
 session = ort.InferenceSession(MODEL_PATH, providers=["CPUExecutionProvider"])
 input_name = session.get_inputs()[0].name
@@ -42,18 +43,31 @@ def infer(img_path):
     probs = softmax(logits)         # apply softmax for probabilities
 
     cls_id = int(np.argmax(probs))
-    pred_class = CLASSES[cls_id]
+    raw_class = CLASSES[cls_id]
     confidence = float(probs[cls_id])
 
+    pred_class = raw_class
+    #fix for irregular classification cases
+    # Low confidence → other
+    if confidence < OTHER_THRESHOLD:
+        pred_class = "other"
+
+    # Line-structure ambiguity correction
+    if pred_class in ["bridge", "crack", "open"] and confidence < 0.90:
+        pred_class = "other"
+
+    # CMP false-positive correction
+    if pred_class == "cmp" and confidence < 0.85:
+        pred_class = "other"
     # self-learning trigger
     self_learn_hook(img_path, pred_class, confidence)
 
-    return pred_class, confidence
-
-
+    return pred_class, confidence, raw_class
 
 if __name__ == "__main__":
-    label, conf = infer(test_img)
-    print("Prediction:", label)
+    label, conf, raw = infer(test_img)
+    print("Raw Prediction:", raw)
+    print("Final Prediction:", label)
     print("Confidence:", conf)
+
 

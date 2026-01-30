@@ -13,6 +13,7 @@ CLASSES = [
 
 IMG_SIZE_HIGH = 224
 IMG_SIZE_LOW = 160
+OTHER_THRESHOLD = 0.80   # tunable 
 
 LATENCY_THRESHOLD = 0.15   # seconds
 CPU_THRESHOLD = 70         # %
@@ -58,17 +59,33 @@ def auto_edge_infer(img_path):
     x = preprocess(img_path, size)
     out = session.run(None, {input_name: x})
     latency = time.time() - start
+
     logits = out[0][0]          # raw output
     probs = softmax(logits)     # convert to probabilities
     cls_id = int(np.argmax(probs))
 
+    pred_class = CLASSES[cls_id]
+    confidence = float(probs[cls_id])
+
+    # ---------- Semantic Correction Layer ----------
+    if confidence < OTHER_THRESHOLD:
+        pred_class = "other"
+
+    if pred_class in ["bridge", "crack", "open"] and confidence < 0.90:
+        pred_class = "other"
+
+    if pred_class == "cmp" and confidence < 0.85:
+        pred_class = "other"
+    # ----------------------------------------------
+
     return {
-        "class": CLASSES[cls_id],
-        "confidence": float(probs[cls_id]),
+        "class": pred_class,
+        "confidence": confidence,
         "mode": mode,
         "cpu": cpu,
         "latency": latency
     }
+
 
 if __name__ == "__main__":
     img = "dataset/sample/test3.png"   # add test image ( i will be using test 3.png)
