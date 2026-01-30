@@ -34,6 +34,10 @@ def preprocess(img_path, size):
     img = np.transpose(img, (2, 0, 1))
     img = np.expand_dims(img, axis=0)
     return img
+def softmax(x):
+    e = np.exp(x - np.max(x))
+    return e / np.sum(e)
+
 
 def auto_edge_infer(img_path):
     cpu = psutil.cpu_percent(interval=0.1)
@@ -54,8 +58,8 @@ def auto_edge_infer(img_path):
     x = preprocess(img_path, size)
     out = session.run(None, {input_name: x})
     latency = time.time() - start
-
-    probs = out[0][0]
+    logits = out[0][0]          # raw output
+    probs = softmax(logits)     # convert to probabilities
     cls_id = int(np.argmax(probs))
 
     return {

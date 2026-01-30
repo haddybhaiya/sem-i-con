@@ -30,19 +30,26 @@ def preprocess(img_path):
     img = np.transpose(img, (2, 0, 1))
     img = np.expand_dims(img, axis=0)
     return img
+def softmax(x):
+    e = np.exp(x - np.max(x))
+    return e / np.sum(e)
 
 def infer(img_path):
     x = preprocess(img_path)
     outputs = session.run(None, {input_name: x})
-    probs = outputs[0][0]
+
+    logits = outputs[0][0]          # raw model output
+    probs = softmax(logits)         # apply softmax for probabilities
+
     cls_id = int(np.argmax(probs))
     pred_class = CLASSES[cls_id]
     confidence = float(probs[cls_id])
 
-    #self learning trigger
+    # self-learning trigger
     self_learn_hook(img_path, pred_class, confidence)
 
     return pred_class, confidence
+
 
 
 if __name__ == "__main__":
