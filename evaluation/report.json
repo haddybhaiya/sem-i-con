@@ -1,0 +1,362 @@
+[
+  {
+    "image": "bridge_109.png",
+    "true_class": "bridge",
+    "pred_class": "bridge",
+    "confidence": 0.9645248055458069,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 0.0,
+    "latency": 0.02550530433654785
+  },
+  {
+    "image": "bridge_15.png",
+    "true_class": "bridge",
+    "pred_class": "other",
+    "confidence": 0.6384362578392029,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 3.8,
+    "latency": 0.006454944610595703
+  },
+  {
+    "image": "bridge_200.png",
+    "true_class": "bridge",
+    "pred_class": "bridge",
+    "confidence": 0.9998341798782349,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 0.0,
+    "latency": 0.0070493221282958984
+  },
+  {
+    "image": "bridge_210.png",
+    "true_class": "bridge",
+    "pred_class": "other",
+    "confidence": 0.6138051748275757,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 5.8,
+    "latency": 0.005542278289794922
+  },
+  {
+    "image": "bridge_224.png",
+    "true_class": "bridge",
+    "pred_class": "bridge",
+    "confidence": 0.9738385081291199,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 7.1,
+    "latency": 0.00734400749206543
+  },
+  {
+    "image": "clean_138.png",
+    "true_class": "clean",
+    "pred_class": "bridge",
+    "confidence": 0.9999995231628418,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 23.1,
+    "latency": 0.02079916000366211
+  },
+  {
+    "image": "clean_145.png",
+    "true_class": "clean",
+    "pred_class": "bridge",
+    "confidence": 0.9999955892562866,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 16.7,
+    "latency": 0.01835465431213379
+  },
+  {
+    "image": "clean_162.png",
+    "true_class": "clean",
+    "pred_class": "bridge",
+    "confidence": 0.999944806098938,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 0.0,
+    "latency": 0.017241477966308594
+  },
+  {
+    "image": "clean_293.png",
+    "true_class": "clean",
+    "pred_class": "bridge",
+    "confidence": 0.9999986886978149,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 6.0,
+    "latency": 0.01778888702392578
+  },
+  {
+    "image": "clean_80.png",
+    "true_class": "clean",
+    "pred_class": "bridge",
+    "confidence": 1.0,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 0.0,
+    "latency": 0.017024517059326172
+  },
+  {
+    "image": "cmp_111.png",
+    "true_class": "cmp",
+    "pred_class": "bridge",
+    "confidence": 0.9994261264801025,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 7.1,
+    "latency": 0.00598597526550293
+  },
+  {
+    "image": "cmp_112.png",
+    "true_class": "cmp",
+    "pred_class": "cmp",
+    "confidence": 0.993519127368927,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 10.5,
+    "latency": 0.005703449249267578
+  },
+  {
+    "image": "cmp_140.png",
+    "true_class": "cmp",
+    "pred_class": "bridge",
+    "confidence": 0.9999991655349731,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 17.4,
+    "latency": 0.019192218780517578
+  },
+  {
+    "image": "cmp_199.png",
+    "true_class": "cmp",
+    "pred_class": "bridge",
+    "confidence": 0.9538920521736145,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 22.7,
+    "latency": 0.008002042770385742
+  },
+  {
+    "image": "cmp_205.png",
+    "true_class": "cmp",
+    "pred_class": "other",
+    "confidence": 0.8440327048301697,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 22.4,
+    "latency": 0.00610661506652832
+  },
+  {
+    "image": "crack_11.png",
+    "true_class": "crack",
+    "pred_class": "bridge",
+    "confidence": 0.9999488592147827,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 15.7,
+    "latency": 0.007597923278808594
+  },
+  {
+    "image": "crack_19.png",
+    "true_class": "crack",
+    "pred_class": "bridge",
+    "confidence": 0.999998927116394,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 13.2,
+    "latency": 0.020087242126464844
+  },
+  {
+    "image": "crack_61.png",
+    "true_class": "crack",
+    "pred_class": "bridge",
+    "confidence": 0.9999889135360718,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 17.9,
+    "latency": 0.0058231353759765625
+  },
+  {
+    "image": "crack_80.png",
+    "true_class": "crack",
+    "pred_class": "crack",
+    "confidence": 0.9998940229415894,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 10.2,
+    "latency": 0.005960226058959961
+  },
+  {
+    "image": "crack_88.png",
+    "true_class": "crack",
+    "pred_class": "bridge",
+    "confidence": 0.9995112419128418,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 20.8,
+    "latency": 0.005872488021850586
+  },
+  {
+    "image": "ler_100.png",
+    "true_class": "ler",
+    "pred_class": "bridge",
+    "confidence": 0.9999992847442627,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 2.1,
+    "latency": 0.017977476119995117
+  },
+  {
+    "image": "ler_2.png",
+    "true_class": "ler",
+    "pred_class": "bridge",
+    "confidence": 0.9999926090240479,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 6.1,
+    "latency": 0.017350435256958008
+  },
+  {
+    "image": "ler_226.png",
+    "true_class": "ler",
+    "pred_class": "bridge",
+    "confidence": 0.9999995231628418,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 10.4,
+    "latency": 0.01883244514465332
+  },
+  {
+    "image": "ler_291.png",
+    "true_class": "ler",
+    "pred_class": "bridge",
+    "confidence": 0.9991292357444763,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 14.3,
+    "latency": 0.016425609588623047
+  },
+  {
+    "image": "ler_35.png",
+    "true_class": "ler",
+    "pred_class": "bridge",
+    "confidence": 0.9904772043228149,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 6.2,
+    "latency": 0.017861127853393555
+  },
+  {
+    "image": "open_17.png",
+    "true_class": "open",
+    "pred_class": "other",
+    "confidence": 0.7007930874824524,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 0.0,
+    "latency": 0.017467498779296875
+  },
+  {
+    "image": "open_171.png",
+    "true_class": "open",
+    "pred_class": "ler",
+    "confidence": 0.94808030128479,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 6.0,
+    "latency": 0.018749475479125977
+  },
+  {
+    "image": "open_226.png",
+    "true_class": "open",
+    "pred_class": "ler",
+    "confidence": 0.9999990463256836,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 3.9,
+    "latency": 0.017345190048217773
+  },
+  {
+    "image": "open_255.png",
+    "true_class": "open",
+    "pred_class": "bridge",
+    "confidence": 0.9706639647483826,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 12.5,
+    "latency": 0.017164230346679688
+  },
+  {
+    "image": "open_293.png",
+    "true_class": "open",
+    "pred_class": "bridge",
+    "confidence": 0.9050061702728271,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 6.2,
+    "latency": 0.01778388023376465
+  },
+  {
+    "image": "other_140.png",
+    "true_class": "other",
+    "pred_class": "bridge",
+    "confidence": 0.9999942779541016,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 0.0,
+    "latency": 0.018889427185058594
+  },
+  {
+    "image": "other_145.png",
+    "true_class": "other",
+    "pred_class": "bridge",
+    "confidence": 0.9906689524650574,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 14.0,
+    "latency": 0.01661062240600586
+  },
+  {
+    "image": "other_198.png",
+    "true_class": "other",
+    "pred_class": "bridge",
+    "confidence": 0.9998165965080261,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 0.0,
+    "latency": 0.01765894889831543
+  },
+  {
+    "image": "other_253.png",
+    "true_class": "other",
+    "pred_class": "via",
+    "confidence": 0.9716925024986267,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 10.7,
+    "latency": 0.016810894012451172
+  },
+  {
+    "image": "other_273.png",
+    "true_class": "other",
+    "pred_class": "bridge",
+    "confidence": 0.9999992847442627,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 4.2,
+    "latency": 0.01832890510559082
+  },
+  {
+    "image": "via_118.png",
+    "true_class": "via",
+    "pred_class": "bridge",
+    "confidence": 0.9842560887336731,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 7.1,
+    "latency": 0.01715683937072754
+  },
+  {
+    "image": "via_142.png",
+    "true_class": "via",
+    "pred_class": "bridge",
+    "confidence": 0.9239705204963684,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 6.2,
+    "latency": 0.017098426818847656
+  },
+  {
+    "image": "via_22.png",
+    "true_class": "via",
+    "pred_class": "bridge",
+    "confidence": 0.9338129758834839,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 0.0,
+    "latency": 0.019112586975097656
+  },
+  {
+    "image": "via_257.png",
+    "true_class": "via",
+    "pred_class": "other",
+    "confidence": 1.0,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 5.4,
+    "latency": 0.018264293670654297
+  },
+  {
+    "image": "via_263.png",
+    "true_class": "via",
+    "pred_class": "other",
+    "confidence": 1.0,
+    "mode": "FP32_HIGH_RES",
+    "cpu": 10.4,
+    "latency": 0.016751527786254883
+  }
+]

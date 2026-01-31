@@ -1,4 +1,8 @@
+import sys
 import os
+
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(ROOT_DIR)
 import json
 from edge.auto_edge import auto_edge_infer
 
