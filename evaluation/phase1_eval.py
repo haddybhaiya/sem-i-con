@@ -6,7 +6,7 @@ sys.path.append(ROOT_DIR)
 import json
 from edge.auto_edge import auto_edge_infer
 
-DATASET = "dataset/test"   # phase-1 test dataset 
+DATASET = "dataset/1test"   # phase-1 test dataset 
 RESULTS = []
 
 for cls in os.listdir(DATASET):

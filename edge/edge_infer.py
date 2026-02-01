@@ -10,7 +10,7 @@ from learning.self_learn import self_learn_hook
 
 
 MODEL_PATH = "models/1edge_model_int8.onnx"
-test_img = "dataset/sample/test7.jpg"  
+test_img = "dataset/1test/open/open_171.png"  
 CLASSES = [
     "clean",
     "bridge",
