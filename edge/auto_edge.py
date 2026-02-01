@@ -1,38 +1,32 @@
-import sys, os
 import psutil
 import time
 import onnxruntime as ort
 import numpy as np
 import cv2
 
-# ----------------- Path fix -----------------
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(ROOT_DIR)
-# --------------------------------------------
-
 FP32_MODEL = "models/1edge_model.onnx"
 INT8_MODEL = "models/1edge_model_int8.onnx"
 
-CLASSES = [
-    "clean",
-    "bridge",
-    "cmp",
-    "crack",
-    "open",
-    "ler",
-    "via",
-    "other"
-]
+CLASSES = ["clean","bridge","cmp","crack","open","ler","via","other"]
 
 IMG_SIZE_HIGH = 224
 IMG_SIZE_LOW = 160
-
 CPU_THRESHOLD = 70  # %
 
+CLASS_THRESHOLDS = {
+    "clean": 0.40,
+    "cmp": 0.45,
+    "crack": 0.50,
+    "open": 0.55,
+    "ler": 0.45,
+    "bridge": 0.60,
+    "via": 0.55,
+    "other": 0.70
+}
 
 
-def load_session(model_path):
-    return ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
+def load_session(path):
+    return ort.InferenceSession(path, providers=["CPUExecutionProvider"])
 
 
 session_fp32 = load_session(FP32_MODEL)
@@ -57,14 +51,9 @@ def softmax(x):
     return e / np.sum(e)
 
 
-def entropy(p):
-    return -np.sum(p * np.log(p + 1e-9))
-
-
 def auto_edge_infer(img_path):
     cpu = psutil.cpu_percent(interval=0.1)
 
-    # -------- Auto Edge Selection --------
     if cpu > CPU_THRESHOLD:
         session = session_int8
         input_name = input_int8
@@ -75,54 +64,34 @@ def auto_edge_infer(img_path):
         input_name = input_fp32
         size = IMG_SIZE_HIGH
         mode = "FP32_HIGH_RES"
-    # ------------------------------------
 
     start = time.time()
     x = preprocess(img_path, size)
-    outputs = session.run(None, {input_name: x})
+    logits = session.run(None, {input_name: x})[0][0]
     latency = time.time() - start
 
-    logits = outputs[0][0]
     probs = softmax(logits)
+    top2 = np.argsort(probs)[-2:][::-1]
 
-    # -------- Decision Logic --------
-    sorted_idx = np.argsort(probs)[::-1]
-    top1, top2 = sorted_idx[0], sorted_idx[1]
+    raw_class = CLASSES[top2[0]]
+    confidence = float(probs[top2[0]])
+    pred_class = raw_class
 
-    top1_class = CLASSES[top1]
-    top1_conf = float(probs[top1])
-    margin = float(probs[top1] - probs[top2])
-    ent = entropy(probs)
+    # ---- class-wise threshold ----
+    if confidence < CLASS_THRESHOLDS[raw_class]:
+        pred_class = "other"
 
-    final_class = top1_class
-
-    # Low confidence
-    if top1_conf < 0.60:
-        final_class = "other"
-
-    #  Ambiguous boundary
-    elif margin < 0.15:
-        final_class = "other"
-
-    #  High uncertainty
-    elif ent > 1.6:
-        final_class = "other"
-
-    #  Structural defect sanity
-    elif top1_class in ["bridge", "crack", "open"] and top1_conf < 0.85:
-        final_class = "other"
-
-    #  CMP stricter gate
-    elif top1_class == "cmp" and top1_conf < 0.80:
-        final_class = "other"
-    # ------------------------------------
+    # ---- ambiguity resolver ----
+    second_class = CLASSES[top2[1]]
+    if raw_class in ["cmp", "bridge", "open"] and second_class in ["via", "crack"]:
+        if abs(probs[top2[0]] - probs[top2[1]]) < 0.08:
+            pred_class = "other"
 
     return {
-        "class": final_class,
-        "raw_class": top1_class,
-        "confidence": top1_conf,
-        "margin": margin,
-        "entropy": ent,
+        "class": pred_class,
+        "raw": raw_class,
+        "confidence": confidence,
+        "top2": [(CLASSES[i], float(probs[i])) for i in top2],
         "mode": mode,
         "cpu": cpu,
         "latency": latency
@@ -130,6 +99,5 @@ def auto_edge_infer(img_path):
 
 
 if __name__ == "__main__":
-    img = "dataset/sample/test3.png"
-    result = auto_edge_infer(img)
-    print(result)
+    img = "dataset/sample/test6.png"
+    print(auto_edge_infer(img))
