@@ -10,7 +10,7 @@ import torch
 from training.model import build_model
 
 MODEL_PATH = "models/1edge_model.pth" # path to the new trained PyTorch model 
-ONNX_PATH = "models/1edge_modeln.onnx"
+ONNX_PATH = "models/1edge_model.onnx"
 NUM_CLASSES = 8
 IMG_SIZE = 224
 

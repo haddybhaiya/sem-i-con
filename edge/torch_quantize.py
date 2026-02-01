@@ -7,8 +7,8 @@ sys.path.append(ROOT_DIR)
 
 from training.model import build_model
 
-MODEL_PATH = "models/edge_model.pth"
-OUT_PATH = "models/edge_model_int8.pth"
+MODEL_PATH = "models/1edge_model.pth" #change in pipeline from torch-quantize.py
+OUT_PATH = "models/1edge_model_int8.pth" #no longer going extra dynamic quantization step
 NUM_CLASSES = 8
 
 device = "cpu"
