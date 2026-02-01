@@ -4,8 +4,8 @@ import onnxruntime as ort
 import numpy as np
 import cv2
 
-FP32_MODEL = "models/edge_model.onnx"
-INT8_MODEL = "models/edge_model_int8.onnx"
+FP32_MODEL = "models/1edge_model.onnx"
+INT8_MODEL = "models/1edge_model_int8.onnx"
 
 CLASSES = [
     "clean","bridge","cmp","crack","open","ler","via","other"

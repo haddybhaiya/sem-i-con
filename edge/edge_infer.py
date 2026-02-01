@@ -1,11 +1,16 @@
+import sys, os
+
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(ROOT_DIR)
+
 import onnxruntime as ort
 import cv2
 import numpy as np
 from learning.self_learn import self_learn_hook
 
 
-MODEL_PATH = "models/edge_model_int8.onnx"
-test_img = "dataset/sample/test3.png"  
+MODEL_PATH = "models/1edge_model_int8.onnx"
+test_img = "dataset/sample/test7.jpg"  
 CLASSES = [
     "clean",
     "bridge",
@@ -35,39 +40,65 @@ def softmax(x):
     e = np.exp(x - np.max(x))
     return e / np.sum(e)
 
+def entropy(p):
+    return -np.sum(p * np.log(p + 1e-9))
+
+
 def infer(img_path):
     x = preprocess(img_path)
     outputs = session.run(None, {input_name: x})
 
-    logits = outputs[0][0]          # raw model output
-    probs = softmax(logits)         # apply softmax for probabilities
+    logits = outputs[0][0]
+    probs = softmax(logits)
 
-    cls_id = int(np.argmax(probs))
-    raw_class = CLASSES[cls_id]
-    confidence = float(probs[cls_id])
+    # top-1 and top-2
+    sorted_idx = np.argsort(probs)[::-1]
+    top1, top2 = sorted_idx[0], sorted_idx[1]
 
-    pred_class = raw_class
-    #fix for irregular classification cases
-    # Low confidence → other
-    if confidence < OTHER_THRESHOLD:
-        pred_class = "other"
+    top1_class = CLASSES[top1]
+    top1_conf = float(probs[top1])
+    margin = float(probs[top1] - probs[top2])
+    ent = entropy(probs)
 
-    # Line-structure ambiguity correction
-    if pred_class in ["bridge", "crack", "open"] and confidence < 0.90:
-        pred_class = "other"
+    final_class = top1_class
 
-    # CMP false-positive correction
-    if pred_class == "cmp" and confidence < 0.85:
-        pred_class = "other"
-    # self-learning trigger
-    self_learn_hook(img_path, pred_class, confidence)
+    # -------- decision logic -------- #
 
-    return pred_class, confidence, raw_class
+    #  Very uncertain → other
+    if top1_conf < 0.60:
+        final_class = "other"
+
+    #  Ambiguous boundary → other
+    elif margin < 0.15:
+        final_class = "other"
+
+    #  High confusion → other
+    elif ent > 1.6:
+        final_class = "other"
+
+    #  Structural defect sanity
+    elif top1_class in ["bridge", "crack", "open"] and top1_conf < 0.85:
+        final_class = "other"
+
+    # CMP stricter gate
+    elif top1_class == "cmp" and top1_conf < 0.80:
+        final_class = "other"
+
+    # self-learning hook
+    self_learn_hook(img_path, final_class, top1_conf)
+
+    return {
+        "raw_class": top1_class,
+        "final_class": final_class,
+        "confidence": top1_conf,
+        "margin": margin,
+        "entropy": ent
+    }
 
 if __name__ == "__main__":
-    label, conf, raw = infer(test_img)
-    print("Raw Prediction:", raw)
-    print("Final Prediction:", label)
-    print("Confidence:", conf)
-
-
+    result = infer(test_img)
+    print("Raw Prediction:", result["raw_class"])
+    print("Final Prediction:", result["final_class"])
+    print("Confidence:", result["confidence"])
+    print("Margin:", result["margin"])
+    print("Entropy:", result["entropy"])    
