@@ -1,32 +1,23 @@
 import sys, os
-import numpy as np
-import cv2
-import onnxruntime as ort
-
-# project root
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(ROOT_DIR)
 
-from learning.self_learn import self_learn_hook
+import onnxruntime as ort
+import cv2
+import numpy as np
 
 MODEL_PATH = "models/1edge_model_int8.onnx"
-TEST_IMG = "dataset/sample/test7.jpg"
 
-CLASSES = ["clean","bridge","cmp","crack","open","ler","via","other"]
-
-# ---- calibrated thresholds (IMPORTANT) ----
-CLASS_THRESHOLDS = {
-    "clean": 0.40,
-    "cmp": 0.45,
-    "crack": 0.50,
-    "open": 0.55,
-    "ler": 0.45,
-    "bridge": 0.60,
-    "via": 0.55,
-    "other": 0.70
-}
+CLASSES = [
+    "clean","bridge","cmp","crack","open","ler","via","other"
+]
 
 IMG_SIZE = 224
+
+# ---- Tuned for your dataset ----
+CONF_THRESHOLD = 0.55
+MARGIN_THRESHOLD = 0.18   # top1 - top2 confidence gap
+# --------------------------------
 
 session = ort.InferenceSession(MODEL_PATH, providers=["CPUExecutionProvider"])
 input_name = session.get_inputs()[0].name
@@ -34,12 +25,14 @@ input_name = session.get_inputs()[0].name
 
 def preprocess(img_path):
     img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise ValueError(f"Cannot read image: {img_path}")
+
     img = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
     img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
     img = img.astype(np.float32) / 255.0
     img = np.transpose(img, (2, 0, 1))
-    img = np.expand_dims(img, axis=0)
-    return img
+    return np.expand_dims(img, axis=0)
 
 
 def softmax(x):
@@ -52,33 +45,28 @@ def infer(img_path):
     logits = session.run(None, {input_name: x})[0][0]
     probs = softmax(logits)
 
-    # top predictions
-    top2 = np.argsort(probs)[-2:][::-1]
-    raw_class = CLASSES[top2[0]]
-    confidence = float(probs[top2[0]])
+    top2 = probs.argsort()[-2:][::-1]
+    top1, top2_id = top2[0], top2[1]
 
-    pred_class = raw_class
+    confidence = float(probs[top1])
+    margin = confidence - float(probs[top2_id])
 
-    # ---- class-wise thresholding ----
-    if confidence < CLASS_THRESHOLDS[raw_class]:
+    pred_class = CLASSES[top1]
+
+    # --------- Rejection logic ----------
+    if confidence < CONF_THRESHOLD or margin < MARGIN_THRESHOLD:
         pred_class = "other"
-
-    # ---- ambiguity resolver (ONLY ONE RULE) ----
-    second_class = CLASSES[top2[1]]
-    if raw_class in ["cmp", "bridge", "open"] and second_class in ["via", "crack"]:
-        if abs(probs[top2[0]] - probs[top2[1]]) < 0.08:
-            pred_class = "other"
-
-    self_learn_hook(img_path, pred_class, confidence)
+    # -----------------------------------
 
     return {
-        "final": pred_class,
-        "raw": raw_class,
+        "class": pred_class,
         "confidence": confidence,
-        "top2": [(CLASSES[i], float(probs[i])) for i in top2]
+        "margin": margin,
+        "raw_top1": CLASSES[top1],
+        "raw_top2": CLASSES[top2_id]
     }
 
 
 if __name__ == "__main__":
-    out = infer(TEST_IMG)
-    print(out)
+    img = "dataset/sample/test7.jpg"
+    print(infer(img))

@@ -7,26 +7,21 @@ import cv2
 FP32_MODEL = "models/1edge_model.onnx"
 INT8_MODEL = "models/1edge_model_int8.onnx"
 
-CLASSES = ["clean","bridge","cmp","crack","open","ler","via","other"]
+CLASSES = [
+    "clean","bridge","cmp","crack","open","ler","via","other"
+]
 
 IMG_SIZE_HIGH = 224
 IMG_SIZE_LOW = 160
-CPU_THRESHOLD = 70  # %
 
-CLASS_THRESHOLDS = {
-    "clean": 0.40,
-    "cmp": 0.45,
-    "crack": 0.50,
-    "open": 0.55,
-    "ler": 0.45,
-    "bridge": 0.60,
-    "via": 0.55,
-    "other": 0.70
-}
+CPU_THRESHOLD = 70
+
+CONF_THRESHOLD = 0.55
+MARGIN_THRESHOLD = 0.18
 
 
-def load_session(path):
-    return ort.InferenceSession(path, providers=["CPUExecutionProvider"])
+def load_session(model_path):
+    return ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
 
 
 session_fp32 = load_session(FP32_MODEL)
@@ -38,12 +33,14 @@ input_int8 = session_int8.get_inputs()[0].name
 
 def preprocess(img_path, size):
     img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise ValueError(f"Cannot read image: {img_path}")
+
     img = cv2.resize(img, (size, size))
     img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
     img = img.astype(np.float32) / 255.0
     img = np.transpose(img, (2, 0, 1))
-    img = np.expand_dims(img, axis=0)
-    return img
+    return np.expand_dims(img, axis=0)
 
 
 def softmax(x):
@@ -71,27 +68,24 @@ def auto_edge_infer(img_path):
     latency = time.time() - start
 
     probs = softmax(logits)
-    top2 = np.argsort(probs)[-2:][::-1]
 
-    raw_class = CLASSES[top2[0]]
-    confidence = float(probs[top2[0]])
-    pred_class = raw_class
+    top2 = probs.argsort()[-2:][::-1]
+    top1, top2_id = top2[0], top2[1]
 
-    # ---- class-wise threshold ----
-    if confidence < CLASS_THRESHOLDS[raw_class]:
+    confidence = float(probs[top1])
+    margin = confidence - float(probs[top2_id])
+
+    pred_class = CLASSES[top1]
+
+    if confidence < CONF_THRESHOLD or margin < MARGIN_THRESHOLD:
         pred_class = "other"
-
-    # ---- ambiguity resolver ----
-    second_class = CLASSES[top2[1]]
-    if raw_class in ["cmp", "bridge", "open"] and second_class in ["via", "crack"]:
-        if abs(probs[top2[0]] - probs[top2[1]]) < 0.08:
-            pred_class = "other"
 
     return {
         "class": pred_class,
-        "raw": raw_class,
         "confidence": confidence,
-        "top2": [(CLASSES[i], float(probs[i])) for i in top2],
+        "margin": margin,
+        "raw_top1": CLASSES[top1],
+        "raw_top2": CLASSES[top2_id],
         "mode": mode,
         "cpu": cpu,
         "latency": latency
@@ -99,5 +93,5 @@ def auto_edge_infer(img_path):
 
 
 if __name__ == "__main__":
-    img = "dataset/sample/test6.png"
+    img = "dataset/sample/test3.png"
     print(auto_edge_infer(img))
