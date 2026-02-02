@@ -20,4 +20,5 @@ edge-semiconductor-ai/
 ├── requirements.txt
 ├── README.md
 └── .gitignore
+
 ```
