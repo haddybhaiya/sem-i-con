@@ -9,8 +9,8 @@ sys.path.append(ROOT_DIR)
 import torch
 from training.model import build_model
 
-MODEL_PATH = "models/edge_model.pth"
-ONNX_PATH = "models/edge_model.onnx"
+MODEL_PATH = "models/1edge_model.pth" # path to the new trained PyTorch model 
+ONNX_PATH = "models/1edge_model.onnx"
 NUM_CLASSES = 8
 IMG_SIZE = 224
 
@@ -28,7 +28,7 @@ torch.onnx.export(
     ONNX_PATH,
     input_names=["input"],
     output_names=["output"],
-    opset_version=12,
+    opset_version=18, # latest opset -change
     do_constant_folding=True
 )
 

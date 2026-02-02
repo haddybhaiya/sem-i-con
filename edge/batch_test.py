@@ -6,7 +6,7 @@ sys.path.append(ROOT_DIR)
 from edge.auto_edge import auto_edge_infer
 
 
-TEST_DIR = "dataset/sample"
+TEST_DIR = "dataset/1test/bridge"  # directory with test images
 
 results = []
 

@@ -2,9 +2,9 @@ import os
 import shutil
 import random
 
-SRC = "dataset/synthetic_dataset"
-DST = "dataset/test"
-SAMPLES_PER_CLASS = 5   #(small + fair)
+SRC = "dataset/1synthetic_dataset"
+DST = "dataset/1test"
+SAMPLES_PER_CLASS = 25   #(small + fair)
 SEED = 42
 
 random.seed(SEED)

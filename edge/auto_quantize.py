@@ -1,7 +1,7 @@
 from onnxruntime.quantization import quantize_dynamic, QuantType
 
-MODEL_PATH = "models/edge_model.onnx"
-OUT_PATH = "models/edge_model_int8.onnx"
+MODEL_PATH = "models/1edge_model.onnx" #newly exported ONNX model
+OUT_PATH = "models/1edge_model_int8.onnx"
 
 quantize_dynamic(
     model_input=MODEL_PATH,

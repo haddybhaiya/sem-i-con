@@ -6,8 +6,8 @@ sys.path.append(ROOT_DIR)
 
 from training.model import build_model
 
-MODEL_PATH = "models/edge_model_int8.pth"
-ONNX_PATH = "models/edge_model_int8.onnx"
+MODEL_PATH = "models/1edge_model.pth" #change in pipeline from torch-quantize.py
+ONNX_PATH = "models/1edge_model_int8.onnx"
 NUM_CLASSES = 8
 IMG_SIZE = 224
 
