@@ -48,6 +48,7 @@ base_dataset/
 *.ckpt
 *.tflite
 *.engine
+*.onnx.data
 
 # =========================
 # Logs / Outputs
@@ -84,3 +85,5 @@ config/secrets.yaml
 # Experiments
 # =========================
 notebooks/outputs/
+
+models/convnext_sem.onnx.data

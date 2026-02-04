@@ -1,34 +1,39 @@
-import sys
+import sys, os
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(ROOT_DIR)
+
+from edge.auto_edge import auto_edge_infer
+from collections import defaultdict
 import os
 
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sys.path.append(ROOT_DIR)
-import json
-from edge.auto_edge import auto_edge_infer
+TEST_DATASET = "dataset/test"
 
-DATASET = "dataset/test"   # phase-1 test dataset 
-RESULTS = []
+CLASSES = [
+    "clean","bridge","cmp","crack",
+    "open","ler","via","other"
+]
 
-for cls in os.listdir(DATASET):
-    cls_path = os.path.join(DATASET, cls)
-    if not os.path.isdir(cls_path):
+correct = defaultdict(int)
+total = defaultdict(int)
+
+for cls in CLASSES:
+    cls_path = os.path.join(TEST_DATASET, cls)
+    if not os.path.exists(cls_path):
         continue
 
     for img in os.listdir(cls_path):
         img_path = os.path.join(cls_path, img)
-        res = auto_edge_infer(img_path)
+        result = auto_edge_infer(img_path)
 
-        RESULTS.append({
-            "image": img,
-            "true_class": cls,
-            "pred_class": res["class"],
-            "confidence": res["confidence"],
-            "mode": res["mode"],
-            "cpu": res["cpu"],
-            "latency": res["latency"]
-        })
+        total[cls] += 1
+        if result["class"] == cls:
+            correct[cls] += 1
 
-with open("evaluation/report.json", "w") as f:
-    json.dump(RESULTS, f, indent=2)
-
-print("Phase-1 evaluation complete ,report.json generated")
+print("\nClass-wise accuracy:")
+for cls in CLASSES:
+    if total[cls] == 0:
+        continue
+    acc = correct[cls] / total[cls]
+    print(f"{cls:>8} : {acc:.3f}")
+overall_acc = sum(correct.values()) / sum(total.values())
+print(f"\nOverall accuracy: {overall_acc:.3f}")

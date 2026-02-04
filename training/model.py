@@ -1,10 +1,22 @@
-import timm
+import torch
 import torch.nn as nn
+import timm
 
-def build_model(num_classes=8):
+
+def build_model(
+    num_classes: int = 8,
+    in_chans: int = 1,
+    pretrained: bool = False
+):
+    """
+    ConvNeXt-Tiny backbone adapted for SEM grayscale images
+    """
+
     model = timm.create_model(
-        "mobilenetv3_small_100",
-        pretrained=True,
-        num_classes=num_classes
+        "convnext_tiny",
+        pretrained=pretrained,
+        num_classes=num_classes,
+        in_chans=in_chans
     )
+
     return model

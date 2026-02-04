@@ -1,35 +1,52 @@
-import sys
-import os
+import torch
+import sys, os
 
-# Add project root to path
+# ------------------ PATH SETUP ------------------
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(ROOT_DIR)
 
+from training.model import build_model   # must match training
 
-import torch
-from training.model import build_model
+# ------------------ CONFIG ------------------
+MODEL_PATH = "models/convnext_sem.pth"      # trained ConvNeXt
+ONNX_PATH  = "models/convnext_sem.onnx"
 
-MODEL_PATH = "models/edge_model.pth"
-ONNX_PATH = "models/edge_model.onnx"
 NUM_CLASSES = 8
 IMG_SIZE = 224
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
+# ------------------ LOAD MODEL ------------------
+model = build_model(
+    num_classes=NUM_CLASSES,
+    in_chans=1           # IMPORTANT: grayscale
+)
 
-model = build_model(NUM_CLASSES)
-model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
+state = torch.load(MODEL_PATH, map_location=DEVICE)
+model.load_state_dict(state)
 model.eval()
 
-dummy_input = torch.randn(1, 3, IMG_SIZE, IMG_SIZE)
+# ------------------ DUMMY INPUT ------------------
+dummy_input = torch.randn(
+    1,        # batch
+    1,        # channels (GRAY)
+    IMG_SIZE,
+    IMG_SIZE
+)
 
+# ------------------ EXPORT ------------------
 torch.onnx.export(
     model,
     dummy_input,
     ONNX_PATH,
+    export_params=True,
+    opset_version=18,
+    do_constant_folding=True,
     input_names=["input"],
-    output_names=["output"],
-    opset_version=12,
-    do_constant_folding=True
+    output_names=["logits"],
+    dynamic_axes={
+        "input": {0: "batch"},
+        "logits": {0: "batch"}
+    }
 )
 
-print("ONNX model exported to:", ONNX_PATH)
+print("✅ FP32 ONNX model exported to:", ONNX_PATH)
