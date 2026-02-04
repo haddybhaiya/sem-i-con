@@ -1,35 +1,39 @@
-import sys
-import os
-
-# Add project root to path
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(ROOT_DIR)
-
-
 import torch
-from training.model import build_model
+import timm
 
-MODEL_PATH = "models/1edge_model.pth" # path to the new trained PyTorch model 
-ONNX_PATH = "models/1edge_model.onnx"
+MODEL_PATH = "models/sem.pth"
+ONNX_PATH  = "models/sem.onnx"
+
 NUM_CLASSES = 8
 IMG_SIZE = 224
-
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-model = build_model(NUM_CLASSES)
-model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
+# ⚠️ MUST MATCH TRAINING EXACTLY
+model = timm.create_model(
+    "tf_efficientnetv2_s",   # <-- same backbone as training
+    pretrained=True,
+    num_classes=NUM_CLASSES,
+    in_chans=3 
+             # grayscale replicated → RGB
+)
+
+state = torch.load(MODEL_PATH, map_location=device)
+
+# If trained normally (model.state_dict())
+model.load_state_dict(state)
+
 model.eval()
 
-dummy_input = torch.randn(1, 3, IMG_SIZE, IMG_SIZE)
+dummy = torch.randn(1, 3, IMG_SIZE, IMG_SIZE)
 
 torch.onnx.export(
     model,
-    dummy_input,
+    dummy,
     ONNX_PATH,
     input_names=["input"],
-    output_names=["output"],
-    opset_version=18, # latest opset -change
+    output_names=["logits"],
+    opset_version=18,
     do_constant_folding=True
 )
 
-print("ONNX model exported to:", ONNX_PATH)
+print("✅ Exported:", ONNX_PATH)
