@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 from learning.self_learn import self_learn_hook
 
-MODEL_PATH = "models/convnext_sem.onnx"
+MODEL_PATH = "models/convnext_sem_fp16.onnx"
 
 CLASSES = [
     "clean", "bridge", "cmp", "crack",
