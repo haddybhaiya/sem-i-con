@@ -6,7 +6,7 @@ import onnxruntime as ort
 import cv2
 import numpy as np
 
-MODEL_PATH = "models/1edge_model_int8.onnx"
+MODEL_PATH = "models/sem_int8.onnx"
 
 CLASSES = [
     "clean","bridge","cmp","crack","open","ler","via","other"

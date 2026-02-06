@@ -6,7 +6,7 @@ sys.path.append(ROOT_DIR)
 
 from training.model import build_model
 
-INT8_PTH = "models/sem_int8.pth"
+INT8_PTH = "models/sem.onnx"
 INT8_ONNX = "models/sem_int8.onnx"
 
 NUM_CLASSES = 8
