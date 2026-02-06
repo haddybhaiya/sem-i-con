@@ -1,34 +1,24 @@
-import json
-from collections import defaultdict
+# evaluation/metrics.py
 
-with open("evaluation/report.json") as f:
-    data = json.load(f)
+from sklearn.metrics import classification_report, accuracy_score
 
-total = len(data)
-correct = 0
-class_stats = defaultdict(lambda: {"tp": 0, "total": 0})
-latencies = []
+def compute_metrics(y_true, y_pred, class_names):
+    report = classification_report(
+        y_true,
+        y_pred,
+        target_names=class_names,
+        zero_division=0
+    )
 
-for d in data:
-    true = d["true_class"]
-    pred = d["pred_class"]
+    accuracy = accuracy_score(y_true, y_pred)
 
-    class_stats[true]["total"] += 1
-    latencies.append(d["latency"])
+    class_accuracy = {}
+    for idx, cls in enumerate(class_names):
+        total = sum(1 for y in y_true if y == idx)
+        correct = sum(
+            1 for yt, yp in zip(y_true, y_pred)
+            if yt == idx and yp == idx
+        )
+        class_accuracy[cls] = round(correct / total, 3) if total > 0 else 0.0
 
-    if true == pred:
-        correct += 1
-        class_stats[true]["tp"] += 1
-
-accuracy = correct / total if total > 0 else 0
-avg_latency = sum(latencies) / len(latencies) if latencies else 0
-
-print("\nPhase-1 Evaluation Report")
-print("Total samples:", total)
-print("Overall accuracy:", round(accuracy, 4))
-print("Avg latency:", round(avg_latency, 4), "sec")
-
-print("\nClass-wise accuracy:")
-for cls, v in class_stats.items():
-    acc = v["tp"] / v["total"] if v["total"] > 0 else 0
-    print(cls, ":", round(acc, 4))
+    return accuracy, class_accuracy, report

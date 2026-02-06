@@ -4,7 +4,7 @@ import random
 
 SRC = "dataset/synthetic_dataset"
 DST = "dataset/test"
-SAMPLES_PER_CLASS = 5   #(small + fair)
+SAMPLES_PER_CLASS = 100   #(small + fair)
 SEED = 42
 
 random.seed(SEED)
