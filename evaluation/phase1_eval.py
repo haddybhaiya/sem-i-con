@@ -81,7 +81,12 @@ for cls_name in CLASSES:
 
         # Run ONNX Inference
         logits = session.run(None, {input_name: x})[0][0]
-        probs = softmax(logits)
+
+         # --- NEW TEMPERATURE SCALING LOGIC ---
+        # T < 1 (e.g., 0.8) makes the model more "confident" in its top choice
+        T = 0.8 
+        probs = softmax(logits / T)
+        # probs = softmax(logits)  # Original for comparison
 
         pred_id = int(np.argmax(probs))
         confidence = float(probs[pred_id])
@@ -110,4 +115,30 @@ else:
     for cls in CLASSES:
         print(f"{cls:>8} : {class_acc.get(cls, 0.0):.4f}")
     print("="*30)
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+
+def plot_confusion_matrix(y_true, y_pred, classes):
+    """
+    Generates and saves a heatmap of the model's confusion.
+    """
+    cm = confusion_matrix(y_true, y_pred)
+    plt.figure(figsize=(10, 8))
+    
+    # Create Heatmap
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+                xticklabels=classes, yticklabels=classes)
+    
+    plt.title('Semiconductor Defect Confusion Matrix')
+    plt.ylabel('Actual Label')
+    plt.xlabel('Predicted Label')
+    
+    # Save the plot
+    save_path = "evaluation_results.png"
+    plt.savefig(save_path)
+    print(f"📊 Confusion Matrix saved to: {save_path}")
+    plt.show()
+plot_confusion_matrix(y_true, y_pred, CLASSES)
 
