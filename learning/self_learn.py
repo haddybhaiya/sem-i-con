@@ -1,49 +1,38 @@
+# learning/self_learn.py
+
 import os
-import csv
+import json
 import shutil
 from datetime import datetime
 
-# Paths
-BUFFER_DIR = "learning/buffer"
-OTHER_DIR = os.path.join(BUFFER_DIR, "other")
-LOWCONF_DIR = os.path.join(BUFFER_DIR, "low_confidence")
-LOG_FILE = os.path.join(BUFFER_DIR, "logs.csv")
+SELF_LEARN_DIR = "self_learn_buffer"
+LOG_FILE = os.path.join(SELF_LEARN_DIR, "log.jsonl")
 
-CONF_THRESHOLD = 0.75   # below this = learning sample
+CONFIDENCE_TRIGGER = 0.70   # below this → suspicious
 
-os.makedirs(OTHER_DIR, exist_ok=True)
-os.makedirs(LOWCONF_DIR, exist_ok=True)
-os.makedirs(BUFFER_DIR, exist_ok=True)
-
-# Init log file
-if not os.path.exists(LOG_FILE):
-    with open(LOG_FILE, "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["timestamp", "image", "predicted_class", "confidence", "reason"])
-
-def log_sample(img_path, pred_class, confidence):
-    ts = datetime.now().isoformat()
-    reason = "other_class" if pred_class == "other" else "low_confidence"
-
-    # destination
-    if pred_class == "other":
-        dst_dir = OTHER_DIR
-    else:
-        dst_dir = LOWCONF_DIR
-
-    fname = os.path.basename(img_path)
-    new_name = f"{ts.replace(':','_')}_{fname}"
-    dst_path = os.path.join(dst_dir, new_name)
-
-    shutil.copy(img_path, dst_path)
-
-    # log
-    with open(LOG_FILE, "a", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow([ts, img_path, pred_class, confidence, reason])
-
-    print(f"[SELF-LEARN] stored -> {dst_path}")
+os.makedirs(SELF_LEARN_DIR, exist_ok=True)
 
 def self_learn_hook(img_path, pred_class, confidence):
-    if pred_class == "other" or confidence < CONF_THRESHOLD:
-        log_sample(img_path, pred_class, confidence)
+    """
+    Collects low-confidence samples for future retraining
+    """
+    if confidence >= CONFIDENCE_TRIGGER:
+        return
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    img_name = os.path.basename(img_path)
+
+    sample_id = f"{timestamp}_{img_name}"
+    save_path = os.path.join(SELF_LEARN_DIR, sample_id)
+
+    shutil.copy(img_path, save_path)
+
+    record = {
+        "image": sample_id,
+        "predicted_class": pred_class,
+        "confidence": confidence,
+        "time": timestamp
+    }
+
+    with open(LOG_FILE, "a") as f:
+        f.write(json.dumps(record) + "\n")
