@@ -1,4 +1,5 @@
 # evaluation/phase1_eval.py
+# always load via PIL to match torchvision's Grayscale math
 
 import os
 import sys
