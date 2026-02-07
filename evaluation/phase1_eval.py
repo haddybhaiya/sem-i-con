@@ -15,7 +15,7 @@ from evaluation.metrics import compute_metrics
 
 # --- CONFIG ---
 MODEL_PATH = "models/mobilenetv3_sem.onnx"
-DATASET_DIR = "dataset/1test"
+DATASET_DIR = "dataset/2test"
 
 # FIXED: Must be ALPHABETICAL to match ImageFolder logic
 CLASSES = [
