@@ -1,3 +1,5 @@
+<img width="1902" height="310" alt="image" src="https://github.com/user-attachments/assets/1beffec0-7cd0-44af-abb6-475701c64943" />
+
 # Semiconductor Defect Detection – Edge AI Pipeline (Phase 1)
 
 This repository contains an **end-to-end edge-ready defect classification pipeline for SEM (Scanning Electron Microscope) images**
