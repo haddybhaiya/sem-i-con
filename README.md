@@ -7,8 +7,10 @@ This repository contains an **end-to-end edge-ready defect classification pipeli
 The solution focuses on:
 - Grayscale SEM image understanding  
 - Data scarcity handling via synthetic generation  
-- Edge deployment using ONNX Runtime  
+- Edge deployment using ONNX Runtime
+  ### MVP
 - Model compression via **knowledge distillation**
+- **Self learn pipeline with integrated auto edge system**
 
 ---
 
