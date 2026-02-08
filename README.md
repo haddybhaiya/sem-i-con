@@ -1,6 +1,6 @@
 # Semiconductor Defect Detection – Edge AI Pipeline (Phase 1)
 
-This repository contains an **end-to-end edge-ready defect classification pipeline for SEM (Scanning Electron Microscope) images**, built for the **i4C / IESA DeepTech Hackathon – Phase 1**.
+This repository contains an **end-to-end edge-ready defect classification pipeline for SEM (Scanning Electron Microscope) images**
 
 The solution focuses on:
 - Grayscale SEM image understanding  
@@ -25,7 +25,7 @@ The goal is to **automatically classify SEM images into defect categories** on *
 
 ---
 
-## 🧠 Proposed Solution (High Level)
+## 🧠 Proposed Solution 
 
 1. **Base Dataset (Grayscale SEM)**
    - Manually labeled defect images
@@ -51,7 +51,7 @@ The goal is to **automatically classify SEM images into defect categories** on *
 6. **ONNX Export & Edge Inference**
    - PIL-based preprocessing (grayscale-safe)
    - ONNX Runtime (CPU)
-   - Semantic guard for reliability
+   - Semantic guard for reliability (recently put to 0)
 
 ---
 
@@ -79,7 +79,7 @@ The goal is to **automatically classify SEM images into defect categories** on *
 ### Teacher Model
 - Architecture: ConvNeXt
 - Input: 1 × 224 × 224 (grayscale)
-- Training: Transfer learning
+- Training: Transfer learning 
 - Purpose: High-accuracy feature extraction
 
 ### Student Model (Final)
@@ -98,7 +98,7 @@ Evaluation performed on a **mixed test set** (clean + noisy SEM images).
 - **Strong performance on:** clean, via, other
 - **Robust to noise & blur introduced during synthesis**
 
-Confusion matrix and class-wise accuracy are available in `evaluation/`.
+## Confusion matrix and class-wise accuracy are available evaluation_results.json and evaluation_results.png in ROOT DIRECTORY.
 
 ---
 
@@ -120,6 +120,31 @@ Confusion matrix and class-wise accuracy are available in `evaluation/`.
 - Final defect classification
 
 ---
+# Some Important links
+- Dataset DRIVE LINK(test zip file also provided) : ```https://drive.google.com/drive/folders/16eWdfwJfuVV2kBwTZAlm7GFnwZbKSBzu?
+usp=sharing```
+- Model (.pth) + ONNX Link : ```https://drive.google.com/drive/folders/1Sx_sw75ysi-lVEnsodQMJ64DUIs-huav```
+- Evaluation report and Confusion Matrix : ROOT DIRECTORY
+---
+## How To Run
+- clone reposittory :
+  ```
+  https://github.com/haddybhaiya/sem-i-con.git
+   ```
+- Download requirements:
+  ```
+  pip install -r requirements.txt
+   ```
+- Download and paste :
+   - models in ```/models```
+   - dataset in ```/dataset```
+- Run phase1_eval.py
+  ```
+  py evaluation/phase1_eval.py
+  ```
+  
+     
+
 
 ## 📁 Repository Structure
 
