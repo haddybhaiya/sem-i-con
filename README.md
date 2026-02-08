@@ -12,7 +12,7 @@ The solution focuses on:
 
 ---
 
-## 📌 Problem Statement
+## Problem Statement
 
 Manual inspection of semiconductor wafers using SEM images is:
 - Time-consuming
@@ -27,7 +27,7 @@ The goal is to **automatically classify SEM images into defect categories** on *
 
 ---
 
-## 🧠 Proposed Solution 
+## Proposed Solution 
 
 1. **Base Dataset (Grayscale SEM)**
    - Manually labeled defect images
@@ -57,9 +57,9 @@ The goal is to **automatically classify SEM images into defect categories** on *
 
 ---
 
-## 🗂 Dataset Plan & Class Design
+##  Dataset Plan & Class Design
 
-- **Total Images (after synthesis):** ~300 per class
+- **Total Images (after synthesis):** ~300 per class = 2400 images
 - **Number of Classes:** 8  
   - `clean`
   - `bridge`
@@ -76,7 +76,7 @@ The goal is to **automatically classify SEM images into defect categories** on *
 
 ---
 
-## 🏗 Model Architecture (Phase 1 Baseline)
+##  Model Architecture (Phase 1 Baseline)
 <img width="1212" height="500" alt="semicon drawio" src="https://github.com/user-attachments/assets/2866b1c6-9538-4cf5-9732-53614435814d" />
 
 
@@ -94,7 +94,7 @@ The goal is to **automatically classify SEM images into defect categories** on *
 
 ---
 
-## 📊 Phase-1 Results (Student Model)
+##  Phase-1 Results (Student Model)
 
 Evaluation performed on a **mixed test set** (clean + noisy SEM images).
 
@@ -106,7 +106,7 @@ Evaluation performed on a **mixed test set** (clean + noisy SEM images).
 
 ---
 
-## ⚙️ Edge Inference Pipeline
+##  Edge Inference Pipeline
 
 **Preprocessing**
 - PIL grayscale loading
@@ -150,7 +150,7 @@ usp=sharing```
      
 
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 .
