@@ -127,7 +127,7 @@ Evaluation performed on a **mixed test set** (clean + noisy SEM images).
 # Some Important links
 - Dataset DRIVE LINK(test zip file also provided) : ```https://drive.google.com/drive/folders/16eWdfwJfuVV2kBwTZAlm7GFnwZbKSBzu?
 usp=sharing```
-- Model (.pth) + ONNX Link : ```https://drive.google.com/drive/folders/1Sx_sw75ysi-lVEnsodQMJ64DUIs-huav```
+- Model (.pth) + ONNX Link(FP32) : ```https://drive.google.com/drive/folders/1Sx_sw75ysi-lVEnsodQMJ64DUIs-huav```
 - Evaluation report and Confusion Matrix : ROOT DIRECTORY
 ---
 ## How To Run
