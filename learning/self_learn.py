@@ -6,7 +6,7 @@ import shutil
 from datetime import datetime
 
 SELF_LEARN_DIR = "self_learn_buffer"
-LOG_FILE = os.path.join(SELF_LEARN_DIR, "log.jsonl")
+LOG_FILE = os.path.join(SELF_LEARN_DIR, "log.json")
 
 CONFIDENCE_TRIGGER = 0.70   # below this → suspicious
 
