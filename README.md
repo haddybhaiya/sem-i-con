@@ -98,7 +98,7 @@ The goal is to **automatically classify SEM images into defect categories** on *
 
 Evaluation performed on a **mixed test set** (clean + noisy SEM images).
 
-- **Overall Accuracy:** 84.46%(on noise dataset) else 98% to favourable
+- **Overall Accuracy:** 84.46%(on noise test dataset) else 98% to favourable
 - **Strong performance on:** clean, via, other
 - **Robust to noise & blur introduced during synthesis (available in 2test.zip)**
 
