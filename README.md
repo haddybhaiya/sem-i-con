@@ -75,6 +75,8 @@ The goal is to **automatically classify SEM images into defect categories** on *
 ---
 
 ## 🏗 Model Architecture (Phase 1 Baseline)
+<img width="1212" height="500" alt="semicon drawio" src="https://github.com/user-attachments/assets/2866b1c6-9538-4cf5-9732-53614435814d" />
+
 
 ### Teacher Model
 - Architecture: ConvNeXt
@@ -96,7 +98,7 @@ Evaluation performed on a **mixed test set** (clean + noisy SEM images).
 
 - **Overall Accuracy:** ~84.46%
 - **Strong performance on:** clean, via, other
-- **Robust to noise & blur introduced during synthesis**
+- **Robust to noise & blur introduced during synthesis (available in 2test.zip)**
 
 ## Confusion matrix and class-wise accuracy are available evaluation_results.json and evaluation_results.png in ROOT DIRECTORY.
 
