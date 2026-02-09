@@ -131,6 +131,7 @@ Evaluation performed on a **mixed test set** (clean + noisy SEM images).
 usp=sharing```
 - Model (.pth) + ONNX Link(FP32) : ```https://drive.google.com/drive/folders/1Sx_sw75ysi-lVEnsodQMJ64DUIs-huav```
 - Evaluation report and Confusion Matrix : ROOT DIRECTORY
+- phase 1 ppt/pptx : ROOT DIRECTORY
 ---
 ## How To Run
 - clone reposittory :
