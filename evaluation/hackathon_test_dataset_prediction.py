@@ -104,7 +104,40 @@ accuracy = accuracy_score(y_true, y_pred)
 precision = precision_score(y_true, y_pred, average="macro", zero_division=0)
 recall = recall_score(y_true, y_pred, average="macro", zero_division=0)
 
-print(f"\nResults:\nAcc: {accuracy:.4f} | Prec: {precision:.4f} | Rec: {recall:.4f}")
+# print(f"\nResults:\nAcc: {accuracy:.4f} | Prec: {precision:.4f} | Rec: {recall:.4f}")
+
+#  FINAL METRICS & CLASS-WISE BREAKDOWN
+
+accuracy = accuracy_score(y_true, y_pred)
+precision = precision_score(y_true, y_pred, average="macro", zero_division=0)
+recall = recall_score(y_true, y_pred, average="macro", zero_division=0)
+
+print("\n" + "="*40)
+print("📊 PHASE-2 GLOBAL METRICS")
+print("="*40)
+print(f"Overall Accuracy : {accuracy:.4f}")
+print(f"Macro Precision  : {precision:.4f}")
+print(f"Macro Recall     : {recall:.4f}")
+
+print("\n" + "="*40)
+print(f"{'Class Name':<12} | {'Accuracy':<10}")
+print("-" * 40)
+
+# Calculate per-class accuracy from the confusion matrix
+cm = confusion_matrix(y_true, y_pred)
+# Avoid division by zero if a class has 0 samples in the test set
+total_per_class = cm.sum(axis=1)
+correct_per_class = cm.diagonal()
+
+for idx, cls_name in enumerate(CLASSES):
+    if total_per_class[idx] > 0:
+        acc = correct_per_class[idx] / total_per_class[idx]
+        print(f"{cls_name:<12} | {acc:.4f}")
+    else:
+        print(f"{cls_name:<12} | No Samples")
+
+print("="*40 + "\n")
+
 
 # Save results
 with open("phase2_report.json", "w") as f:
