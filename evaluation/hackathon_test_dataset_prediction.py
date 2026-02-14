@@ -34,8 +34,8 @@ FOLDER_TO_CLASS = {
 }
 
 # Hyperparameters for Inference
-T_SCALE = 0.8        # Sharpen distilled model peaks
-OTHER_THRESHOLD = 0.35  # Force to 'other' if max confidence is low
+T_SCALE = 0.65       # Sharpen distilled model peaks
+OTHER_THRESHOLD = 0.28  # Force to 'other' if max confidence is low
 
 
 # PREPROCESSING
@@ -83,6 +83,11 @@ for folder in os.listdir(DATASET_DIR):
 
         # Run ONNX
         logits = session.run(None, {input_name: x})[0][0]
+
+        # If the model is guessing 'clean' but it's not a strong guess, 
+        # we nudge it toward 'other'
+        clean_idx = CLASS_TO_ID["clean"]
+        logits[clean_idx] -= 0.5  # Artificial penalty to reduce 'clean' false positives
         
         # Apply Temperature and Softmax
         probs = softmax(logits / T_SCALE)
@@ -90,7 +95,7 @@ for folder in os.listdir(DATASET_DIR):
         pred_id = int(np.argmax(probs))
         confidence = float(probs[pred_id])
 
-        # SEMANTIC GUARD: If it's a 'Particle' or model is unsure, force 'other'
+        # SEMANTIC GUARD: If it's a weak prediction, default to 'other' to avoid false positives
         if confidence < OTHER_THRESHOLD:
             pred_id = CLASS_TO_ID["other"]
 
