@@ -22,14 +22,20 @@ CLASS_TO_ID = {c: i for i, c in enumerate(CLASSES)}
 
 # Hackathon Folder Mapping
 FOLDER_TO_CLASS = {
-    "Particle": "other",  # New class maps to 'other'
-    "VIA": "via", "LER": "ler", "Open": "open", "Other": "other",
-    "Bridge": "bridge", "Clean": "clean", "CMP": "cmp", "Crack": "crack",
+    "Bridge": "bridge",
+    "Clean": "clean",
+    "CMP": "cmp",
+    "Crack": "crack",
+    "LER": "ler",
+    "Open": "open",
+    "Other": "other",    # Direct match
+    "Particle": "other", # Mapped to existing 'other' class
+    "VIA": "via",
 }
 
 # Hyperparameters for Inference
-T_SCALE = 0.7         # Sharpen distilled model peaks
-OTHER_THRESHOLD = 0.25  # Force to 'other' if max confidence is low
+T_SCALE = 0.8        # Sharpen distilled model peaks
+OTHER_THRESHOLD = 0.35  # Force to 'other' if max confidence is low
 
 
 # PREPROCESSING
