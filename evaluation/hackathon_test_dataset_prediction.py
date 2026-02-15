@@ -145,7 +145,7 @@ print("="*40 + "\n")
 
 
 # Save results
-with open("phase2_report.json", "w") as f:
+with open("evaluation/png_and_eval_reports/phase2_report_hck.json", "w") as f:
     json.dump({"accuracy": accuracy, "precision": precision, "recall": recall}, f, indent=4)
 
 # Plot Confusion Matrix
@@ -154,6 +154,6 @@ sns.heatmap(confusion_matrix(y_true, y_pred), annot=True, fmt="d",
             xticklabels=CLASSES, yticklabels=CLASSES, cmap="Blues")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
-plt.title("Hackathon Evaluation Matrix")
-plt.savefig("phase2_confusion_matrix.png")
+plt.title("Hackathon Evaluation Matrix_hck")
+plt.savefig("evaluation/png_and_eval_reports/phase2_confusion_matrix_hck.png")
 plt.show()

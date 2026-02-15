@@ -1,0 +1,22 @@
+{
+    "accuracy": 0.41216216216216217,
+    "precision": 0.434145170047298,
+    "recall": 0.3830622250733138,
+    "hyperparameters": {
+        "T_SCALE": 0.8,
+        "OTHER_THRESHOLD": 0.28,
+        "CLEAN_PENALTY": 1.0,
+        "CLEAN_CONFIDENCE_REQ": 0.6,
+        "SMALL_DEFECT_CONFIDENCE_REQ": 0.6
+    },
+    "class_wise_accuracy": {
+        "bridge": 0.46875,
+        "clean": 0.42424242424242425,
+        "cmp": 0.43333333333333335,
+        "crack": 0.3548387096774194,
+        "ler": 0.2,
+        "open": 0.36666666666666664,
+        "other": 0.55,
+        "via": 0.26666666666666666
+    }
+}
