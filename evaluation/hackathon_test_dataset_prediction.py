@@ -34,8 +34,8 @@ FOLDER_TO_CLASS = {
 }
 
 # Hyperparameters for Inference
-T_SCALE = 0.65       # Sharpen distilled model peaks
-OTHER_THRESHOLD = 0.28  # Force to 'other' if max confidence is low
+T_SCALE = 1.2       # Sharpen distilled model peaks
+OTHER_THRESHOLD = 0.45  # Force to 'other' if max confidence is low
 
 
 # PREPROCESSING
